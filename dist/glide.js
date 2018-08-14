@@ -5,10 +5,10 @@
  */
 
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global.Glide = factory());
-}(this, (function () { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (factory((global.Glide = {})));
+}(this, (function (exports) { 'use strict';
 
   var defaults = {
     /**
@@ -146,7 +146,7 @@
      *
      * @type {String}
      */
-    animationTimingFunc: 'cubic-bezier(0.165, 0.840, 0.440, 1.000)',
+    animationTimingFunc: 'cubic-bezier(.165, .840, .440, 1)',
 
     /**
      * Throttle costly events at most once per every wait milliseconds.
@@ -2518,7 +2518,7 @@
   var END_EVENTS = ['touchend', 'touchcancel', 'mouseup', 'mouseleave'];
   var MOUSE_EVENTS = ['mousedown', 'mousemove', 'mouseup', 'mouseleave'];
 
-  function Swipe (Glide, Components, Events) {
+  function swipe (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -2824,7 +2824,7 @@
     return Swipe;
   }
 
-  function Images (Glide, Components, Events) {
+  function images (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -2885,7 +2885,7 @@
     return Images;
   }
 
-  function Anchors (Glide, Components, Events) {
+  function anchors (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -3056,7 +3056,7 @@
   var NAV_SELECTOR = '[data-glide-el="controls[nav]"]';
   var CONTROLS_SELECTOR = '[data-glide-el^="controls"]';
 
-  function Controls (Glide, Components, Events) {
+  function controls (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -3243,7 +3243,7 @@
     return Controls;
   }
 
-  function Keyboard (Glide, Components, Events) {
+  function keyboard (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -3329,7 +3329,7 @@
     return Keyboard;
   }
 
-  function Autoplay (Glide, Components, Events) {
+  function autoplay (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -3497,7 +3497,7 @@
     return {};
   }
 
-  function Breakpoints (Glide, Components, Events) {
+  function breakpoints (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -3586,7 +3586,6 @@
   }
 
   var COMPONENTS = {
-    // Required
     Html: Html,
     Translate: Translate,
     Transition: Transition,
@@ -3598,16 +3597,7 @@
     Clones: Clones,
     Resize: Resize,
     Build: Build,
-    Run: Run,
-
-    // Optional
-    Swipe: Swipe,
-    Images: Images,
-    Anchors: Anchors,
-    Controls: Controls,
-    Keyboard: Keyboard,
-    Autoplay: Autoplay,
-    Breakpoints: Breakpoints
+    Run: Run
   };
 
   var Glide$1 = function (_Core) {
@@ -3629,6 +3619,15 @@
     return Glide$$1;
   }(Glide);
 
-  return Glide$1;
+  exports.Swipe = swipe;
+  exports.Images = images;
+  exports.Anchors = anchors;
+  exports.Controls = controls;
+  exports.Keyboard = keyboard;
+  exports.Autoplay = autoplay;
+  exports.Breakpoints = breakpoints;
+  exports.default = Glide$1;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
