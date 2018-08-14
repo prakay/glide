@@ -41,7 +41,7 @@ const COMPONENTS = {
   // Optional
   Swipe,
   Images,
-  Anchors,
+//  Anchors,
   Controls,
   Keyboard,
   Autoplay,

@@ -5,10 +5,10 @@
  */
 
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (factory((global.Glide = {})));
-}(this, (function (exports) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global.Glide = factory());
+}(this, (function () { 'use strict';
 
   var defaults = {
     /**
@@ -2518,7 +2518,7 @@
   var END_EVENTS = ['touchend', 'touchcancel', 'mouseup', 'mouseleave'];
   var MOUSE_EVENTS = ['mousedown', 'mousemove', 'mouseup', 'mouseleave'];
 
-  function swipe (Glide, Components, Events) {
+  function Swipe (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -2824,7 +2824,7 @@
     return Swipe;
   }
 
-  function images (Glide, Components, Events) {
+  function Images (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -2885,178 +2885,10 @@
     return Images;
   }
 
-  function anchors (Glide, Components, Events) {
-    /**
-     * Instance of the binder for DOM Events.
-     *
-     * @type {EventsBinder}
-     */
-    var Binder = new EventsBinder();
-
-    /**
-     * Holds detaching status of anchors.
-     * Prevents detaching of already detached anchors.
-     *
-     * @private
-     * @type {Boolean}
-     */
-    var detached = false;
-
-    /**
-     * Holds preventing status of anchors.
-     * If `true` redirection after click will be disabled.
-     *
-     * @private
-     * @type {Boolean}
-     */
-    var prevented = false;
-
-    var Anchors = {
-      /**
-       * Setups a initial state of anchors component.
-       *
-       * @returns {Void}
-       */
-      mount: function mount() {
-        /**
-         * Holds collection of anchors elements.
-         *
-         * @private
-         * @type {HTMLCollection}
-         */
-        this._a = Components.Html.wrapper.querySelectorAll('a');
-
-        this.bind();
-      },
-
-
-      /**
-       * Binds events to anchors inside a track.
-       *
-       * @return {Void}
-       */
-      bind: function bind() {
-        Binder.on('click', Components.Html.wrapper, this.click);
-      },
-
-
-      /**
-       * Unbinds events attached to anchors inside a track.
-       *
-       * @return {Void}
-       */
-      unbind: function unbind() {
-        Binder.off('click', Components.Html.wrapper);
-      },
-
-
-      /**
-       * Handler for click event. Prevents clicks when glide is in `prevent` status.
-       *
-       * @param  {Object} event
-       * @return {Void}
-       */
-      click: function click(event) {
-        event.stopPropagation();
-
-        if (prevented) {
-          event.preventDefault();
-        }
-      },
-
-
-      /**
-       * Detaches anchors click event inside glide.
-       *
-       * @return {self}
-       */
-      detach: function detach() {
-        prevented = true;
-
-        if (!detached) {
-          for (var i = 0; i < this.items.length; i++) {
-            this.items[i].draggable = false;
-
-            this.items[i].setAttribute('data-href', this.items[i].getAttribute('href'));
-
-            this.items[i].removeAttribute('href');
-          }
-
-          detached = true;
-        }
-
-        return this;
-      },
-
-
-      /**
-       * Attaches anchors click events inside glide.
-       *
-       * @return {self}
-       */
-      attach: function attach() {
-        prevented = false;
-
-        if (detached) {
-          for (var i = 0; i < this.items.length; i++) {
-            this.items[i].draggable = true;
-
-            this.items[i].setAttribute('href', this.items[i].getAttribute('data-href'));
-          }
-
-          detached = false;
-        }
-
-        return this;
-      }
-    };
-
-    define(Anchors, 'items', {
-      /**
-       * Gets collection of the arrows HTML elements.
-       *
-       * @return {HTMLElement[]}
-       */
-      get: function get() {
-        return Anchors._a;
-      }
-    });
-
-    /**
-     * Detach anchors inside slides:
-     * - on swiping, so they won't redirect to its `href` attributes
-     */
-    Events.on('swipe.move', function () {
-      Anchors.detach();
-    });
-
-    /**
-     * Attach anchors inside slides:
-     * - after swiping and transitions ends, so they can redirect after click again
-     */
-    Events.on('swipe.end', function () {
-      Components.Transition.after(function () {
-        Anchors.attach();
-      });
-    });
-
-    /**
-     * Unbind anchors inside slides:
-     * - on destroying, to bring anchors to its initial state
-     */
-    Events.on('destroy', function () {
-      Anchors.attach();
-      Anchors.unbind();
-      Binder.destroy();
-    });
-
-    return Anchors;
-  }
-
   var NAV_SELECTOR = '[data-glide-el="controls[nav]"]';
   var CONTROLS_SELECTOR = '[data-glide-el^="controls"]';
 
-  function controls (Glide, Components, Events) {
+  function Controls (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -3243,7 +3075,7 @@
     return Controls;
   }
 
-  function keyboard (Glide, Components, Events) {
+  function Keyboard (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -3329,7 +3161,7 @@
     return Keyboard;
   }
 
-  function autoplay (Glide, Components, Events) {
+  function Autoplay (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -3497,7 +3329,7 @@
     return {};
   }
 
-  function breakpoints (Glide, Components, Events) {
+  function Breakpoints (Glide, Components, Events) {
     /**
      * Instance of the binder for DOM Events.
      *
@@ -3586,6 +3418,7 @@
   }
 
   var COMPONENTS = {
+    // Required
     Html: Html,
     Translate: Translate,
     Transition: Transition,
@@ -3597,7 +3430,16 @@
     Clones: Clones,
     Resize: Resize,
     Build: Build,
-    Run: Run
+    Run: Run,
+
+    // Optional
+    Swipe: Swipe,
+    Images: Images,
+    //  Anchors,
+    Controls: Controls,
+    Keyboard: Keyboard,
+    Autoplay: Autoplay,
+    Breakpoints: Breakpoints
   };
 
   var Glide$1 = function (_Core) {
@@ -3619,15 +3461,6 @@
     return Glide$$1;
   }(Glide);
 
-  exports.Swipe = swipe;
-  exports.Images = images;
-  exports.Anchors = anchors;
-  exports.Controls = controls;
-  exports.Keyboard = keyboard;
-  exports.Autoplay = autoplay;
-  exports.Breakpoints = breakpoints;
-  exports.default = Glide$1;
-
-  Object.defineProperty(exports, '__esModule', { value: true });
+  return Glide$1;
 
 })));
